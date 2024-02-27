@@ -1,8 +1,10 @@
+"""Цей модуль використовується для розміщення моделей додатку 'comments'."""
+
 from django.db import models
 
 
 class Author(models.Model):
-    """A model representing a comment author."""
+    """Модель, що представляє автора коментарів."""
 
     username = models.CharField(
         max_length=100,
@@ -16,11 +18,15 @@ class Author(models.Model):
     )
 
     def __str__(self) -> str:
-        """Returns string representation of the Author model."""
+        """Цей магічний метод повертає рядкове представлення моделі авторів коментарів.
+
+        Returns:
+            рядок: нікнейм автора коментаря.
+        """
         return self.username
 
     class Meta:
-        """Meta options for the Author model."""
+        """Мета-опції для моделі авторів коментарів."""
 
         ordering = ["username"]
         verbose_name = "Comment author"
@@ -28,16 +34,19 @@ class Author(models.Model):
 
 
 class _CommentCustomManager(models.Manager):
-    """Custom manager for the Comment model."""
+    """Спеціальний менеджер для моделі коментарів."""
 
     def all(self):
-        """Returns all comments
-        using the select_related for the 'parent' and 'author'."""
+        """Цей метод повертає всі коментарі, використовуючи select_related для 'parent' та 'author'.
+
+        Returns:
+            QuerySet: Всі коментарі з вибраними пов'язаними об'єктами.
+        """
         return super().all().select_related("parent", "author")
 
 
 class Comment(models.Model):
-    """A model representing a comment."""
+    """Модель, що представляє коментар."""
 
     home_page = models.URLField(
         blank=True, null=True, verbose_name="Home page"
@@ -71,11 +80,15 @@ class Comment(models.Model):
     objects = _CommentCustomManager()
 
     def __str__(self) -> str:
-        """Returns string representation of the Comment model."""
+        """Цей магічний метод повертає рядкове представлення моделі коментарів.
+
+        Returns:
+            рядок: унікальний ідентифікатор коментаря та автора.
+        """
         return f"{self.pk} from {self.author}"
 
     class Meta:
-        """Meta options for the Comment model."""
+        """Мета-опції для моделі коментарів."""
 
         ordering = ["-created"]
         verbose_name = "Comment"

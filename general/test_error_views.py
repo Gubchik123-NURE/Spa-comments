@@ -1,3 +1,5 @@
+"""Цей модуль містить тести для власних обробників помилок."""
+
 from typing import NoReturn
 
 from django.urls import path
@@ -17,32 +19,44 @@ from spa.urls import urlpatterns, handler400, handler404
 
 
 class RaiseExceptionView(View):
-    """View that raises the exception attribute."""
+    """Представлення, що кидає атрибут винятку."""
 
     exception: Exception
 
     def get(self, request: HttpRequest) -> NoReturn:
         """Raises the specified exception."""
+        """Цей метод викликає виняток, який вказаний в атрибуті винятку.
+
+        Raises:
+            exception: Виняток, який вказаний в атрибуті винятку.
+        """
         raise self.exception
 
 
 class RaiseBadRequestView(RaiseExceptionView):
-    """View that raises a 400 Bad Request exception."""
+    """Представлення, що кидає виняток 400 поганого запиту."""
 
     exception = BadRequest
 
 
 class RaiseNotFoundView(RaiseExceptionView):
-    """View that raises a 404 Not Found exception."""
+    """Представлення, що кидає 404, не знайдений винятку."""
 
     exception = Http404
 
 
 class ServerErrorView(BaseView, View):
-    """View that has error."""
+    """Представлення, що має помилку."""
 
     def get(self, request: HttpRequest) -> HttpResponse:
-        """Has error before returns response."""
+        """Цей метод викликає виняток, перед тим як повернути відповідь.
+
+        Args:
+            request: Об'єкт запиту.
+
+        Returns:
+            HttpResponse: Відповідь на HTTP-запит.
+        """
         print(1 / 0)  # ZeroDivisionError
         return HttpResponse("Some content")
 
@@ -58,24 +72,24 @@ urlpatterns += [
 
 
 class CustomErrorHandlerTestMixin:
-    """Test mixin for custom error handlers."""
+    """Тестовий міксин для спеціальних обробників помилок."""
 
     error_handler: ErrorView
 
     def setUp(self):
-        """Gets response with test client by generated url attribute."""
+        """Цей метод встановлює відповідь з тестовим клієнтом за згенерованим атрибутом url."""
         self.response = self.client.get(f"/{self.error_handler.code}/")
 
     def test_view_status_code(self):
-        """Tests response status code matches code attribute."""
+        """Цей метод перевіряє, чи статус відповіді відповідає атрибуту коду."""
         self.assertEqual(self.response.status_code, self.error_handler.code)
 
     def test_view_template(self):
-        """Tests response template matches template_name attribute."""
+        """Цей метод перевіряє, чи шаблон відповіді відповідає атрибуту template_name."""
         self.assertTemplateUsed(self.response, "error.html")
 
     def test_view_content(self):
-        """Tests response content."""
+        """Цей метод перевіряє, чи відповідь містить інформацію про помилку."""
         self.assertContains(
             self.response,
             self.error_handler.name,
@@ -89,18 +103,18 @@ class CustomErrorHandlerTestMixin:
 
 
 class CustomBadRequestViewTest(CustomErrorHandlerTestMixin, TestCase):
-    """Tests for CustomBadRequestView."""
+    """Тести для CustomBadRequestView."""
 
     error_handler = CustomBadRequestView
 
 
 class CustomNotFoundViewTest(CustomErrorHandlerTestMixin, TestCase):
-    """Tests for CustomNotFoundView."""
+    """Тести для CustomNotFoundView."""
 
     error_handler = CustomNotFoundView
 
 
 class CustomServerErrorViewTest(CustomErrorHandlerTestMixin, TestCase):
-    """Tests for CustomServerErrorView."""
+    """Тести для CustomServerErrorView."""
 
     error_handler = CustomServerErrorView

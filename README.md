@@ -1,103 +1,103 @@
 <img title="LapZone" alt="Header image" src="./static/images/site_header.webp">
 
-_This is a page for leaving comments. Users can add comments with various features, and all the entered comments are saved in a relational database (DB), including user data for identification._
+_Це лендінгова сторінка для залишення коментарів. Користувачі можуть додавати коментарі з різними допоміжними функціями, і всі введені коментарі зберігаються в реляційній базі даних (БД), включаючи дані користувача для ідентифікації._
 
-## Demo
+## Демонстрація
 
 <p><img title="Demo" alt="Demo image" src="./demo.jpg"></p>
 
-## Project modules
+## Модулі проекту
 
 <a href='https://pypi.org/project/Django'><img alt='Django' src='https://img.shields.io/pypi/v/Django?label=Django&color=blue'></a> <a href='https://pypi.org/project/django-simple-captcha'><img alt='django-simple-captcha' src='https://img.shields.io/pypi/v/django-simple-captcha?label=django-simple-captcha&color=blue'></a> <a href='https://pypi.org/project/mysqlclient'><img alt='mysqlclient' src='https://img.shields.io/pypi/v/mysqlclient?label=mysqlclient&color=blue'></a> <a href='https://pypi.org/project/Pillow'><img alt='Pillow' src='https://img.shields.io/pypi/v/Pillow?label=Pillow&color=blue'></a> <a href='https://pypi.org/project/python-dotenv'><img alt='python-dotenv' src='https://img.shields.io/pypi/v/python-dotenv?label=python-dotenv&color=blue'></a> <a href='https://pypi.org/project/pytz'><img alt='pytz' src='https://img.shields.io/pypi/v/pytz?label=pytz&color=blue'></a> 
 
-## Features
+## Допоміжні функції
 
-- Users can leave comments with the following fields:
-  1. User Name (alphanumeric characters) - required field.
-  2. E-mail (email format) - required field.
-  3. Home page (URL format) - optional field.
-  4. CAPTCHA (alphanumeric characters) - image and required field.
-  5. Text (the main message text) - required field. HTML tags except the allowed ones are not allowed.
+- Користувачі можуть залишити коментарі з такими полями:
+  1. Ім'я користувача (буквено-цифрові символи) - необхідне поле.
+  2. Електронна пошта (формат електронної пошти) - необхідне поле.
+  3. Домашня сторінка (формат URL) - необов'язкове поле.
+  4. Captcha (буквено-цифрові символи) - зображення та необхідне поле.
+  5. Текст (Основне текст повідомлення) - необхідне поле. Теги HTML, за винятком дозволених, не допускаються.
 
-- The main page of the application has the following requirements:
+- Основна сторінка програми має такі вимоги:
 
-  1. Comments can have multiple replies (cascade display).
-  2. Top-level comments (not replies) are displayed in a table format with the ability to sort by the following fields: User Name, E-mail, and Date added (both in ascending and descending order).
-  3. Messages are paginated with 25 messages per page.
+  1. Коментарі можуть мати кілька відповідей (каскадний вид).
+  2. Коментарі на верхньому рівні (не відповіді) відображаються у форматі таблиці з можливістю сортувати на наступні поля: ім'я користувача, електронна пошта та дата додавання (як у порядну зростання, так і у спадання).
+  3. Відображення 25 коментарів на сторінці.
 
 - JavaScript:
-  1. Server-side and client-side validation of input data.
-  2. Panel with buttons for HTML tags (`[i]`, `[strong]`, `[code]`, `[a]`).
+  1. Валідація вхідних даних на стороні сервера та клієнта.
+  2. Панель з кнопок для тегів HTML (`[i]`, `[strong]`, `[code]`, `[a]`).
 
-- File Handling:
+- Обробка файлів:
 
-  1. Users can add an image or a text file to their comment.
-  2. Images resizes proportionally to a maximum size of 320x240 pixels if the uploaded image is larger. Allowed file formats are JPG, GIF, and PNG.
-  3. Text files should not exceed 100 KB in size, and the only allowed format is TXT.
-  4. File preview includes visual effects (e.g. [Lightbox2](https://lokeshdhakar.com/projects/lightbox2/)).
+  1. Користувачі можуть додати зображення або текстовий файл до свого коментаря.
+  2. Зображення пропорційно змінюється на максимальний розмір 320x240 пікселів, якщо завантажене зображення більше. Дозволені формати файлів - це JPG, GIF та PNG.
+  3. Текстові файли не повинні перевищувати розміром 100 кб, а єдиний дозволений формат - TXT.
+  4. Попередній перегляд файлів включає візуальні ефекти (наприклад, [Lightbox2](https://lokeshdhakar.com/projects/lightbox2/)).
 
-- Regular Expressions:
+- Регулярні вирази:
 
-  1. Users can use the following allowed HTML tags in their messages: `<a href="" title=""> </a> <code> </code> <i> </i> <strong> </strong>`.
-  2. There is validation to ensure proper closing of tags.
+  1. Користувачі можуть використовувати наступні дозволені теги HTML у своїх повідомленнях: `<a href="" title=""> </a> <code> </code> <i> </i> <strong> </strong>`.
+  2. Існує перевірка, щоб забезпечити належне закриття тегів.
 
-## Technology Stack
+## Технології та інструменти
 
-The project utilizes the following technologies and tools:
+Проект використовує такі технології та інструменти:
 
 -   Backend:
-    -   Python programming language (OOP);
-    -   Django framework with the django-simple-captcha extension;
-    -   MySQL database (Django ORM).
+    -   Мова програмування Python (OOP);
+    -   Django фреймворк з django-simple-captcha розширенням;
+    -   MySQL база данних (Django ORM).
 -   Frontend:
     -   HTML & CSS;
     -   JavaScript;
     -   Bootstrap 5.
-- Git for version control.
+- Git для контролю версій.
 
-## Environment Variables
+## Змінні середовища
 
-To run this project, you will need to add the following environment variables:
+Для запуску цього проекту вам потрібно буде додати такі змінні середовища:
 
 `SECRET_KEY`
 `DB_HOST` `DB_NAME` `DB_USER` `DB_PASSWORD`
 
-> Look at the file_env_example.txt
+> Подивіться на file_env_example.txt
 
 ## Getting Started
 
-To get started with the project, follow these steps:
+Щоб розпочати проект, виконайте ці кроки:
 
-1. Clone the repository:
+1. Клонуйте проект:
     ```
-    git clone https://github.com/Gubchik123/dZENcode-test-task.git
-    ```
-
-2. Go to the project directory:
-
-    ```
-    cd dZENcode-test-task
+    git clone https://github.com/Gubchik123-NURE/Spa-comments.git
     ```
 
-3. Install the required dependencies:
+2. Перейдіть до каталогу проекту:
+
+    ```
+    cd Spa-comments
+    ```
+
+3. Встановіть необхідні залежності:
     ```
     pip install -r requirements.txt
     ```
 
-4. Set up the database connection and configurations according to the selected database engine. Apply migrations
+4. Налаштуйте зїєднання та конфігурації бази даних відповідно до вибраного двигуна БД. Застосуйте міграції
     ```
     python manage.py migrate
     ```
 
-5. Run the Django development server:
+5. Запустіть сервер розробки Django:
     ```
     python manage.py runserver
     ```
 
-    > **Note:** Don't forget about environment variables
+    > **Примітка:** Не забувайте про змінні середовища
 
-6. Access the application in your web browser at `http://127.0.0.1:8000` (or the appropriate URL based on your Django configuration).
+6. Відкрийте свій веб-браузер за адресою `http://127.0.0.1:8000` (або відповідна URL-адреса на основі вашої конфігурації Django).
 
-## Conclusion
+## Висновок
 
-The "Spa comments" is a feature-rich web application built using Django, JavaScript, and MySQL. It allows users to leave comments with various options, ensures data validation and security, and provides a user-friendly interface with interactive elements.
+"Spa comments" - це веб-додаток, багатий на функції, побудована за допомогою Django, JavaScript та MySQL. Це дозволяє користувачам залишати коментарі з різними параметрами, забезпечує перевірку даних та безпеку? та забезпечує зручний для користувачів інтерфейс з інтерактивними елементами.

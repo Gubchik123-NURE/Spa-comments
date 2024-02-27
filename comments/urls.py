@@ -1,3 +1,5 @@
+"""Цей модуль містить шляхи для додатку 'comments'."""
+
 from django.urls import path
 
 from . import views

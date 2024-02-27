@@ -1,3 +1,5 @@
+"""Цей модуль містить тести для моделей додатку 'comments'."""
+
 from django.test import TestCase
 from django.db.models import Model
 
@@ -5,7 +7,7 @@ from comments.models import Author, Comment
 
 
 class _ModelMetaOptionsTestMixin:
-    """Mixin for testing the base meta options of models."""
+    """Mixin для тестування базових мета-опцій моделей."""
 
     model: Model
     verbose_name: str
@@ -13,28 +15,22 @@ class _ModelMetaOptionsTestMixin:
     ordering: list[str]
 
     def test_model_verbose_name(self):
-        """
-        Test that the model's verbose name is equal to the verbose_name attribute.
-        """
+        """Цей метод тестує, що назва багатослівної моделі дорівнює атрибуту verbose_name."""
         self.assertEqual(self.model._meta.verbose_name, self.verbose_name)
 
     def test_model_verbose_name_plural(self):
-        """
-        Test that the model's verbose name (plural) is equal to the verbose_name_plural attribute.
-        """
+        """Цей метод тестує, що назва багатослівної моделі (множина) дорівнює атрибуту verbose_name_plual."""
         self.assertEqual(
             self.model._meta.verbose_name_plural, self.verbose_name_plural
         )
 
     def test_model_fields_ordering(self):
-        """
-        Test that the model's ordering is equal to the ordering attribute.
-        """
+        """Цей метод тестує, що впорядкування моделі дорівнює атрибуту впорядкування."""
         self.assertEqual(self.model._meta.ordering, self.ordering)
 
 
 class AuthorModelTestCase(_ModelMetaOptionsTestMixin, TestCase):
-    """Tests for the Author model."""
+    """Тести для моделі автора."""
 
     model = Author
     ordering = ["username"]
@@ -43,36 +39,36 @@ class AuthorModelTestCase(_ModelMetaOptionsTestMixin, TestCase):
 
     @classmethod
     def setUpTestData(cls) -> None:
-        """Creates the first Author for testing."""
+        """Цей метод створює першого автора для тестування."""
         Author.objects.create(username="test_user", email="test@gmail.com")
 
     def test_model_string_representation(self):
-        """Test the model string representation by __str__."""
+        """Цей метод тестує рядкове представлення моделі за допомогою __str__."""
         obj = self.model.objects.first()
         self.assertEqual(str(obj), obj.username)
 
     # * ---------------- Test the 'username' field parameters -----------------
 
     def test_username_max_length(self):
-        """Tests that the username field has max_length=100."""
+        """Цей метод тестує, що поле імені користувача має max_length = 100."""
         self.assertEqual(
             self.model._meta.get_field("username").max_length, 100
         )
 
     def test_username_unique(self):
-        """Tests that the username field is unique=False."""
+        """Цей метод тестує, що поле імені користувача є унікальним = помилково."""
         self.assertFalse(self.model._meta.get_field("username").unique)
 
     def test_username_blank(self):
-        """Tests that the username field is blank=False."""
+        """Цей метод тестує, що поле імені користувача порожнє = помилково."""
         self.assertFalse(self.model._meta.get_field("username").blank)
 
     def test_username_null(self):
-        """Tests that the username field is null=False."""
+        """Цей метод тестує, що поле імені користувача є null = false."""
         self.assertFalse(self.model._meta.get_field("username").null)
 
     def test_username_verbose_name(self):
-        """Tests that the username field has verbose_name='Username'."""
+        """Цей метод тестує, що поле імені користувача має verbose_name = 'ім'я користувача'."""
         self.assertEqual(
             self.model._meta.get_field("username").verbose_name, "Username"
         )
@@ -80,26 +76,26 @@ class AuthorModelTestCase(_ModelMetaOptionsTestMixin, TestCase):
     # * ----------------- Test the 'email' field parameters -------------------
 
     def test_email_unique(self):
-        """Tests that the email field is unique=False."""
+        """Цей метод тестує, що поле електронної пошти є унікальним = помилково."""
         self.assertFalse(self.model._meta.get_field("email").unique)
 
     def test_email_blank(self):
-        """Tests that the email field is blank=False."""
+        """Цей метод тестує, що поле електронної пошти порожнє = помилково."""
         self.assertFalse(self.model._meta.get_field("email").blank)
 
     def test_email_null(self):
-        """Tests that the email field is null=False."""
+        """Цей метод тестує, що поле електронної пошти null = false."""
         self.assertFalse(self.model._meta.get_field("email").null)
 
     def test_email_verbose_name(self):
-        """Tests that the email field has verbose_name='Email address'."""
+        """Цей метод тестує, що поле електронної пошти має verbose_name = 'адреса електронної пошти'."""
         self.assertEqual(
             self.model._meta.get_field("email").verbose_name, "Email address"
         )
 
 
 class CommentModelTestCase(_ModelMetaOptionsTestMixin, TestCase):
-    """Tests for the Comment model."""
+    """Тести для моделі коментарів."""
 
     model = Comment
     ordering = ["-created"]
@@ -108,7 +104,7 @@ class CommentModelTestCase(_ModelMetaOptionsTestMixin, TestCase):
 
     @classmethod
     def setUpTestData(cls) -> None:
-        """Creates the first Comment for testing."""
+        """Цей метод створює перший коментар для тестування."""
         cls.author = Author.objects.create(
             username="test_user", email="test@gmail.com"
         )
@@ -117,22 +113,22 @@ class CommentModelTestCase(_ModelMetaOptionsTestMixin, TestCase):
         )
 
     def test_model_string_representation(self):
-        """Test the model string representation by __str__."""
+        """Цей метод тестує рядкове представлення моделі за допомогою __str__."""
         obj = self.model.objects.first()
         self.assertEqual(str(obj), f"{obj.pk} from {obj.author}")
 
     # * ---------------- Test the 'home_page' field parameters ----------------
 
     def test_home_page_blank(self):
-        """Tests that the home_page field is blank=True."""
+        """Цей метод тестує, що поле Home_Page порожнє = правда."""
         self.assertTrue(self.model._meta.get_field("home_page").blank)
 
     def test_home_page_null(self):
-        """Tests that the home_page field is null=True."""
+        """Цей метод тестує, що поле Home_Page є null = true."""
         self.assertTrue(self.model._meta.get_field("home_page").null)
 
     def test_home_page_verbose_name(self):
-        """Tests that the home_page field has verbose_name='Home page'."""
+        """Цей метод тестує, що поле Home_Page має verbose_name = 'домашня сторінка'."""
         self.assertEqual(
             self.model._meta.get_field("home_page").verbose_name, "Home page"
         )
@@ -140,15 +136,15 @@ class CommentModelTestCase(_ModelMetaOptionsTestMixin, TestCase):
     # * ---------------- Test the 'text' field parameters ---------------------
 
     def test_text_blank(self):
-        """Tests that the text field is blank=False."""
+        """Цей метод тестує, що текстове поле порожнє = помилково."""
         self.assertFalse(self.model._meta.get_field("text").blank)
 
     def test_text_null(self):
-        """Tests that the text field is null=False."""
+        """Цей метод тестує, що текстове поле є null = false."""
         self.assertFalse(self.model._meta.get_field("text").null)
 
     def test_text_verbose_name(self):
-        """Tests that the text field has verbose_name='Comment body'."""
+        """Цей метод тестує, що текстове поле має verbose_name = 'body comment'."""
         self.assertEqual(
             self.model._meta.get_field("text").verbose_name, "Comment body"
         )
@@ -156,21 +152,21 @@ class CommentModelTestCase(_ModelMetaOptionsTestMixin, TestCase):
     # * ----------------- Test the 'file' field parameters --------------------
 
     def test_file_upload_to(self):
-        """Tests that the file field has upload_to='comment_files/'."""
+        """Цей метод тестує, що поле файлу має upload_to = 'comment_files/'."""
         self.assertEqual(
             self.model._meta.get_field("file").upload_to, "comment_files/"
         )
 
     def test_file_blank(self):
-        """Tests that the file field is blank=True."""
+        """Цей метод тестує, що поле файлу порожнє = правда."""
         self.assertTrue(self.model._meta.get_field("file").blank)
 
     def test_file_null(self):
-        """Tests that the file field is null=True."""
+        """Цей метод тестує, що поле файлу є null = true."""
         self.assertTrue(self.model._meta.get_field("file").null)
 
     def test_file_verbose_name(self):
-        """Tests that the file field has verbose_name='Attached comment file'."""
+        """Цей метод тестує, що поле файлу має verbose_name = 'доданий файл коментарів'."""
         self.assertEqual(
             self.model._meta.get_field("file").verbose_name,
             "Attached comment file",
@@ -179,11 +175,11 @@ class CommentModelTestCase(_ModelMetaOptionsTestMixin, TestCase):
     # * ---------------- Test the 'created' field parameters ------------------
 
     def test_created_auto_now_add(self):
-        """Tests that the created field has auto_now_add=True."""
+        """Цей метод тестує, що створене поле має auto_now_add = true."""
         self.assertTrue(self.model._meta.get_field("created").auto_now_add)
 
     def test_created_verbose_name(self):
-        """Tests that the created field has verbose_name='Created datetime'."""
+        """Цей метод тестує, що створене поле має verbose_name = 'створений dateTime'."""
         self.assertEqual(
             self.model._meta.get_field("created").verbose_name,
             "Created datetime",
@@ -192,25 +188,25 @@ class CommentModelTestCase(_ModelMetaOptionsTestMixin, TestCase):
     # * ---------------- Test the 'parent' field parameters -------------------
 
     def test_parent_null(self):
-        """Tests that the parent field is null=True."""
+        """Цей метод тестує, що батьківське поле є null = true."""
         self.assertTrue(self.model._meta.get_field("parent").null)
 
     def test_parent_blank(self):
-        """Tests that the parent field is blank=True."""
+        """Цей метод тестує, що батьківське поле порожнє = правда."""
         self.assertTrue(self.model._meta.get_field("parent").blank)
 
     def test_parent_default(self):
-        """Tests that the parent field has default=None."""
+        """Тести, які батьківське поле має за замовчуванням = немає."""
         self.assertIsNone(self.model._meta.get_field("parent").default)
 
     def test_parent_verbose_name(self):
-        """Tests that the parent field has verbose_name='Parent comment'."""
+        """Цей метод тестує, що батьківське поле має verbose_name = 'батьківський коментар'."""
         self.assertEqual(
             self.model._meta.get_field("parent").verbose_name, "Parent comment"
         )
 
     def test_parent_on_delete(self):
-        """Tests that the parent field on_delete is CASCADE."""
+        """Цей метод тестує, що батьківське поле on_delete є каскадом."""
         Comment.objects.get(id=1).delete()
         with self.assertRaises(Comment.DoesNotExist):
             Comment.objects.get(id=1)
@@ -218,13 +214,13 @@ class CommentModelTestCase(_ModelMetaOptionsTestMixin, TestCase):
     # * ---------------- Test the 'author' field parameters -------------------
 
     def test_author_verbose_name(self):
-        """Tests that the author field has verbose_name='Comment author'."""
+        """Цей метод тестує, що поле автора має verbose_name = 'автор коментарів'."""
         self.assertEqual(
             self.model._meta.get_field("author").verbose_name, "Comment author"
         )
 
     def test_author_on_delete(self):
-        """Tests that the author field on_delete is CASCADE."""
+        """Цей метод тестує, що авторське поле on_delete є каскадом."""
         Comment.objects.get(id=1).delete()
         with self.assertRaises(Comment.DoesNotExist):
             Comment.objects.get(id=1)

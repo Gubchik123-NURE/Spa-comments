@@ -1,3 +1,5 @@
+"""Цей модуль використовується для розміщення класів форм додатку 'comments'."""
+
 import base64
 
 from django import forms
@@ -13,7 +15,7 @@ FIELD_WIDGET_ATTRS = {"class": "form-control mb-1"}
 
 
 class CommentModelForm(forms.ModelForm):
-    """Model form for the Comment model for creating a comment."""
+    """Форма моделі для моделі коментарів для створення коментаря."""
 
     username = forms.CharField(
         max_length=100,
@@ -34,39 +36,54 @@ class CommentModelForm(forms.ModelForm):
         canvas_url: str | None,
         commit=False,
     ) -> None:
-        """Creates a comment for new or exist author."""
+        """Цей метод створює коментар для нового або існуючого автора.
+
+        Args:
+            comment_parent_id (str): Ідентифікатор батьківського коментаря.
+            canvas_url (str): URL-адреса зображення в форматі base64.
+            commit (bool): Зберегти коментар у базі даних.
+        """
         comment: Comment = super().save(commit)
 
         if comment_parent_id and comment_parent_id.isdigit():
             comment.parent = get_object_or_404(
                 Comment, id=int(comment_parent_id)
             )
-        comment.author = self._get_author()
+        comment.author = self.get_author()
 
         if canvas_url:
             comment.file.save(
                 comment.file.name,
-                self._get_image_file_from_(canvas_url, comment.file.name),
+                self.get_image_file_from_(canvas_url, comment.file.name),
             )
         comment.save()
 
-    def _get_author(self) -> Author:
-        """Returns new or exist author."""
+    def get_author(self) -> Author:
+        """Цей метод повертає нового або існуючого автора.
+
+        Returns:
+            Автор: Новий або існуючий автор.
+        """
         author, _ = Author.objects.get_or_create(
             username=self.cleaned_data["username"],
             email=self.cleaned_data["email"],
         )
         return author
 
-    def _get_image_file_from_(
+    def get_image_file_from_(
         self, canvas_url: str, filename: str
     ) -> ContentFile:
         """Returns content file from decoded canvas_url."""
+        """Цей метод повертає файл зображення з декодованої URL-адреси canvas_url.
+
+        Returns:
+            Файл: зображення.
+        """
         image_data = canvas_url.split(",")[1]
         return ContentFile(base64.b64decode(image_data), name=filename)
 
     class Meta:
-        """Meta options for the CommentModelForm."""
+        """Мета-опції для CommentModelForm."""
 
         model = Comment
         fields = ("username", "email", "home_page", "captcha", "text", "file")

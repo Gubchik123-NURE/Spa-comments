@@ -1,9 +1,17 @@
+"""
+Кожен проект Django починає роботу з модулю manage.py. 
+Цей модуль використовується для адміністративних завдань, таких як запуск сервера розробки,
+створення міграцій, створення суперкористувача та інші завдання.
+
+Цей модуль містить функцію main(), яка викликається, коли файл manage.py запускається як скрипт.
+"""
+
 import os
 import sys
 
 
 def main():
-    """Run administrative tasks."""
+    """Ця функція запускає адміністративні завдання."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "spa.settings")
     try:
         from django.core.management import execute_from_command_line

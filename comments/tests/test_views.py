@@ -1,3 +1,5 @@
+"""Цей модуль містить тести для представлень додатку 'comments'."""
+
 from django.urls import reverse
 from django.test import TestCase
 from django.http import HttpResponse
@@ -7,7 +9,7 @@ from comments.forms import CommentModelForm
 
 
 class CommentListViewTestCase(TestCase):
-    """Tests for the CommentListView."""
+    """Тести для представлення списку коментарів."""
 
     url = "/"
     name = "list"
@@ -16,7 +18,7 @@ class CommentListViewTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls) -> None:
-        """Sets up tests data by creating 28 comments."""
+        """Встановлює дані тестів, створюючи 28 коментарів."""
         for count in range(1, 29):
             Comment.objects.create(
                 text=f"Tests comment #{count}",
@@ -27,30 +29,30 @@ class CommentListViewTestCase(TestCase):
             )
 
     def setUp(self) -> None:
-        """Sets up the tests by retrieving a response from the view's URL."""
+        """Встановлює тести, отримаючи відповідь з URL -адреси виду."""
         self.response = self.client.get(self.url)
 
     def test_view_url_exists_at_desired_location(self):
-        """Tests that the view exists at desired location."""
+        """Випробування, що вид існує у бажаному місці."""
         self.assertEqual(self.response.status_code, 200)
 
     def test_view_uses_correct_template(self):
-        """Tests that the response in the view uses the correct template."""
+        """Тести, що відповідь у перегляді використовує правильний шаблон."""
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, self.template_name)
 
     def test_view_url_accessible_by_name(self):
-        """Tests that the view is accessible using its name."""
+        """Випробує, що перегляд доступний за допомогою його імені."""
         response = self.client.get(reverse(self.name))
         self.assertEqual(response.status_code, 200)
 
     def test_comment_form_is_in_context(self):
-        """Tests that the form is in the context."""
+        """Тести, що форма знаходиться в контексті."""
         self.assertIn("form", self.response.context)
         self.assertIsInstance(self.response.context["form"], CommentModelForm)
 
     def test_lists_comments(self):
-        """Tests that comments are listed on a page."""
+        """Тести, які коментарі перераховані на сторінці."""
         self.assertIn("page_obj", self.response.context)
         self.assertEqual(
             self.response.context["page_obj"].object_list,
@@ -60,17 +62,17 @@ class CommentListViewTestCase(TestCase):
     # * ------------------ Testing pagination functionality -------------------
 
     def test_pagination_is_twenty_five(self):
-        """Tests that pagination is set to 25 per page."""
+        """Тести, що Pagition встановлюється на 25 на сторінку."""
         self.assertEqual(len(self.response.context["page_obj"]), 25)
 
     def test_paginated_product_list(self):
-        """Tests second page has (exactly) remaining 3 comments."""
+        """Друга сторінка тестів має (точно) залишилось 3 коментарів."""
         response = self.client.get(f"{self.url}?page=2")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context["page_obj"]), 3)
 
     def test_404_with_invalid_pagination_page_value(self):
-        """Tests that invalid pagination page value results in 404"""
+        """Тести, які недійсні значення сторінки Pagination призводять до 404."""
         response = self.client.get(f"{self.url}?page=0")
         self.assertEqual(response.status_code, 404)
 
@@ -83,18 +85,14 @@ class CommentListViewTestCase(TestCase):
     # * ------------------- Testing ordering functionality --------------------
 
     def test_lists_comments_ordered_by_created_desc_by_default(self):
-        """
-        Tests that comments ordered by created (DESC) by default are listed on a page.
-        """
+        """Тести, які коментарі, упорядковані створеними (DESC) за замовчуванням, перераховані на сторінці."""
         self.assertEqual(
             self.response.context["page_obj"].object_list,
             list(self.queryset[:25]),
         )
 
     def test_lists_comments_ordered_by_created_asc(self):
-        """
-        Tests that comments ordered by created (ASC) are listed on a page.
-        """
+        """Тести, які коментарі, упорядковані створеними (ASC), перераховані на сторінці."""
         response = self.client.get(f"{self.url}?orderby=c&orderdir=asc")
         self.assertEqual(
             response.context["page_obj"].object_list,
@@ -102,9 +100,7 @@ class CommentListViewTestCase(TestCase):
         )
 
     def test_lists_comments_ordered_by_username_asc(self):
-        """
-        Tests that comments ordered by username (ASC) are listed on a page.
-        """
+        """Тести, які коментарі, упорядковані іменем користувача (ASC), перераховані на сторінці."""
         response = self.client.get(f"{self.url}?orderby=u&orderdir=asc")
         self.assertEqual(
             response.context["page_obj"].object_list,
@@ -112,9 +108,7 @@ class CommentListViewTestCase(TestCase):
         )
 
     def test_lists_comments_ordered_by_username_desc(self):
-        """
-        Tests that comments ordered by username (DESC) are listed on a page.
-        """
+        """Тести, які коментарі, упорядковані іменем користувача (DESC), перераховані на сторінці."""
         response = self.client.get(f"{self.url}?orderby=u&orderdir=desc")
         self.assertEqual(
             response.context["page_obj"].object_list,
@@ -122,7 +116,7 @@ class CommentListViewTestCase(TestCase):
         )
 
     def test_lists_comments_ordered_by_email_asc(self):
-        """Tests that comments ordered by email (ASC) are listed on a page."""
+        """Тести, які коментарі, упорядковані електронною поштою (ASC), перераховані на сторінці."""
         response = self.client.get(f"{self.url}?orderby=e&orderdir=asc")
         self.assertEqual(
             response.context["page_obj"].object_list,
@@ -130,7 +124,7 @@ class CommentListViewTestCase(TestCase):
         )
 
     def test_lists_comments_ordered_by_email_desc(self):
-        """Tests that comments ordered by email (DESC) are listed on a page."""
+        """Тести, які коментарі, упорядковані електронною поштою (DESC), перераховані на сторінці."""
         response = self.client.get(f"{self.url}?orderby=e&orderdir=desc")
         self.assertEqual(
             response.context["page_obj"].object_list,
@@ -138,7 +132,7 @@ class CommentListViewTestCase(TestCase):
         )
 
     def test_404_with_invalid_order_parameters(self):
-        """Tests that invalid order parameters result in 404."""
+        """Тести, які недійсні параметри порядку призводять до 404."""
         response = self.client.get(f"{self.url}?orderby=wrong&orderdir=asc")
         self.assertEqual(response.status_code, 404)
 
@@ -153,33 +147,33 @@ class CommentListViewTestCase(TestCase):
 
 
 class CommentCreateViewTestCase(TestCase):
-    """Tests for the CommentCreateView."""
+    """Тести для представлення додавання коментарів."""
 
     url = "/add/"
 
-    def test_405_with_get_request(self):
-        """Tests that the view returns 404 with GET request."""
+    def test_405_withget_request(self):
+        """Випробує, що перегляд повертає 404 із запитом GET."""
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 405)
 
     def test_adding_comment_with_valid_form_data(self):
-        """Tests adding a comment with valid form data."""
-        response = self._test_comment_form_for_validity_and_get_response(
-            self._get_valid_form_data()
+        """Тести, що додають коментар із дійсними даними форми."""
+        response = self.test_comment_form_for_validity_and_get_response(
+            self.get_valid_form_data()
         )
         self.assertContains(response, "Your comment has successfully added.")
 
     def test_adding_comment_with_invalid_form_data(self):
-        """Tests adding a comment with invalid form data."""
-        form_data = self._get_valid_form_data()
+        """Тести, що додають коментар з недійсними даними форми."""
+        form_data = self.get_valid_form_data()
         form_data["username"] = "test user"
-        response = self._test_comment_form_for_validity_and_get_response(
+        response = self.test_comment_form_for_validity_and_get_response(
             form_data, is_valid=False
         )
         self.assertContains(response, "Invalid form data.")
 
     def test_adding_answer_with_valid_form_data(self):
-        """Tests adding an answer with valid form data."""
+        """Тести, що додають відповіді з дійсними даними форми."""
         comment = Comment.objects.create(
             text=f"Tests comment",
             author=Author.objects.create(
@@ -187,40 +181,39 @@ class CommentCreateViewTestCase(TestCase):
                 email=f"test_user@gmail.com",
             ),
         )
-        form_data = self._get_valid_form_data()
+        form_data = self.get_valid_form_data()
         form_data["comment_parent_id"] = comment.id
-        response = self._test_comment_form_for_validity_and_get_response(
+        response = self.test_comment_form_for_validity_and_get_response(
             form_data
         )
         self.assertContains(response, "Your answer has successfully added.")
 
     def test_404_with_nonexistent_parent_id(self):
-        """Tests that the view returns 404 with nonexistent parent_id."""
+        """Тест, що перегляд повертає 404 з неіснуючою батьківською id."""
         # ! I think it's valid test, but it returns 405.
-        # form_data = self._get_valid_form_data()
+        # form_data = self.get_valid_form_data()
         # form_data["comment_parent_id"] = 100
-        # response = self._test_comment_form_for_validity_and_get_response(
+        # response = self.test_comment_form_for_validity_and_get_response(
         #     form_data, is_valid=False, status_code=404
         # )
         # self.assertContains(response, "Not Found")
 
-    def _get_valid_form_data(self) -> dict:
-        """Returns valid form data."""
+    def get_valid_form_data(self) -> dict:
+        """Повертає дійсні дані форми."""
         return {
             "username": "test_user",
             "email": "test_user@gmail.com",
             "text": "Test comment",
         }
 
-    def _test_comment_form_for_validity_and_get_response(
+    def test_comment_form_for_validity_and_get_response(
         self, form_data: dict, is_valid: bool = True, status_code: int = 200
     ) -> HttpResponse:
-        """Tests that the form is valid or invalid
-        by the given form_data and returns the response."""
-        self.assertTrue(
-            CommentModelForm(form_data).is_valid()
-        ) if is_valid else self.assertFalse(
-            CommentModelForm(form_data).is_valid()
+        """Тести, що форма є дійсною або недійсною за допомогою заданої форми_data, і повертає відповідь."""
+        (
+            self.assertTrue(CommentModelForm(form_data).is_valid())
+            if is_valid
+            else self.assertFalse(CommentModelForm(form_data).is_valid())
         )
         response = self.client.post(
             self.url, data=form_data, follow=True  # follow redirects

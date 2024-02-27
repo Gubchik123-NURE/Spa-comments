@@ -1,3 +1,5 @@
+"""Цей модуль містить базовий клас для всіх поглядів."""
+
 import logging
 
 from django import http
@@ -9,12 +11,22 @@ logger = logging.getLogger(__name__)
 
 
 class BaseView:
-    """Base view for all other views with exception handling."""
+    """Базовий вигляд для всіх інших поглядів із обробкою винятків."""
 
     def dispatch(
         self, request: http.HttpRequest, *args, **kwargs
     ) -> http.HttpResponse:
-        """Handles exceptions during dispatch and returns a response."""
+        """Цей метод викликається при кожному HTTP-запиті до погляду.
+
+        Args:
+            request (http.HttpRequest): Об'єкт запиту.
+
+        Raises:
+            e: Виняток, який виник під час обробки запиту.
+
+        Returns:
+            render_error_page: Відповідь на HTTP-запит.
+        """
         try:
             return super().dispatch(request, *args, **kwargs)
         except Exception as e:

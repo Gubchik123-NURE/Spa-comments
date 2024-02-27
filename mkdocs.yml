@@ -1,15 +1,20 @@
 site_name: Spa comments
 copyright: Copyright &copy; 2024 Nikita Hubariev
-repo_url: https://github.com/Gubchik123/dZENcode-test-task
+repo_url: https://github.com/Gubchik123-NURE/Spa-comments
 
 plugins:
-  - mkdocstrings
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            members_order: source
   - search
 
 theme:
   name: material
   palette:
     primary: deep blue
+  language: uk
 
 extra:
   social:
@@ -44,5 +49,5 @@ nav:
   - general:
     - error_views.py: "general/error_views.md"
     - test_error_views.py: "general/test_error_views.md"
-    - test_views.py: "general/views.md"
+    - views.py: "general/views.md"
   - manage.py: "manage.md"

@@ -1,3 +1,5 @@
+"""Цей модуль містить налаштування Django-проекту."""
+
 import os
 import string
 from pathlib import Path
@@ -84,7 +86,11 @@ MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
 
 def get_generated_captcha_challenge() -> tuple[str, str]:
-    """Returns a generated captcha challenge tuple(challenge, response)."""
+    """Ця функція генерує виклик та відповідь для CAPTCHA.
+
+    Returns:
+        CAPTCHA: виклик, відповідь
+    """
     challenge = "".join(choices(string.ascii_uppercase + string.digits, k=5))
     response = challenge.lower()
     return (challenge, response)
